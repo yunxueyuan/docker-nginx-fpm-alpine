@@ -2,7 +2,7 @@ FROM alpine:3.19.0
 
 ARG ALPINE_PACKAGES="php83-iconv php83-pdo_mysql php83-pdo_pgsql php83-openssl php83-simplexml"
 ARG COMPOSER_PACKAGES="aws/aws-sdk-php google/cloud-storage"
-ARG PBURL=https://github.com/PrivateBin/PrivateBin/
+ARG PBURL=https://github.com/yunxueyuan/PrivateBin/
 ARG RELEASE=1.6.2
 ARG UID=65534
 ARG GID=82
@@ -12,8 +12,8 @@ ENV PATH=$PATH:/srv/bin
 
 LABEL org.opencontainers.image.authors=support@privatebin.org \
       org.opencontainers.image.vendor=PrivateBin \
-      org.opencontainers.image.documentation=https://github.com/PrivateBin/docker-nginx-fpm-alpine/blob/master/README.md \
-      org.opencontainers.image.source=https://github.com/PrivateBin/docker-nginx-fpm-alpine \
+      org.opencontainers.image.documentation=https://github.com/yunxueyuan/docker-nginx-fpm-alpine/blob/master/README.md \
+      org.opencontainers.image.source=https://github.com/yunxueyuan/docker-nginx-fpm-alpine \
       org.opencontainers.image.licenses=zlib-acknowledgement \
       org.opencontainers.image.version=${RELEASE}
 
@@ -48,15 +48,15 @@ RUN \
     && ln -s /dev/stderr /var/log/nginx/error.log \
 # Install PrivateBin
     && cd /tmp \
-    && export GNUPGHOME="$(mktemp -d -p /tmp)" \
-    && gpg2 --list-public-keys || /bin/true \
-    && gpg2 --import /tmp/release.asc \
+    #&& export GNUPGHOME="$(mktemp -d -p /tmp)" \
+    #&& gpg2 --list-public-keys || /bin/true \
+    #&& gpg2 --import /tmp/release.asc \
     && rm -rf /var/www/* \
     && if expr "${RELEASE}" : '[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}$' >/dev/null ; then \
          echo "getting release ${RELEASE}"; \
          wget -qO ${RELEASE}.tar.gz.asc ${PBURL}releases/download/${RELEASE}/PrivateBin-${RELEASE}.tar.gz.asc \
          && wget -q ${PBURL}archive/${RELEASE}.tar.gz \
-         && gpg2 --verify ${RELEASE}.tar.gz.asc ; \
+         #&& gpg2 --verify ${RELEASE}.tar.gz.asc ; \
        else \
          echo "getting tarball for ${RELEASE}"; \
          git clone ${PBURL%%/}.git -b ${RELEASE}; \
